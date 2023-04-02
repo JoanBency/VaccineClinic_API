@@ -1,0 +1,25 @@
+{
+  "name": "VaccinationClinic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "mocha --timeout 10000"
+  },
+  "author": "Joan Bency",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.2",
+    "mongoose": "^7.0.1",
+    "mysql2": "^3.2.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.22"
+  }
+}
