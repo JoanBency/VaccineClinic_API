@@ -12,7 +12,7 @@ const vaccineAdministeredRoute = require("./Routes/vaccinesAdministered");
 var app = express();
 
 app.use(cors());
-app.use('/',patientRoute);
+// app.use('/',patientRoute);
 app.use('/patients',patientRoute);
 app.use('/vaccines',vaccineRoute);
 app.use('/vaccinesAdministered',vaccineAdministeredRoute);
