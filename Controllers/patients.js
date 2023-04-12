@@ -1,16 +1,24 @@
 const patientData = require("../Model/patientList");
 const mongoose= require('mongoose');
 const express = require('express');
+const mysql= require('mysql2');
+ 
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
+});
 
  
 const getPatients = async (req, res) => {
-    try {
-        const patient= await patientData.find();
-        
-        res.status(200).json(patient);
-    } catch(error) {
-        res.status(404).json({message: error.message});
-    }
+    pool.query('SELECT * FROM vaccineclinic.PatientList', (err, patient, fields) => {
+        if (!err)
+            res.status(200).json(patient);
+        else
+            res.status(404).json({message: err.message});
+    })
 }
 
 const getspecPatient = async (req,res) => {
@@ -25,32 +33,17 @@ res.status(200).json(stud);
 
 const createPatient =  async (req, res) => {
     console.log(req.body);
-    const newpatient = new patientData({
-        PatientId: Math.random().toString().slice(2,10),
-        PatientName:req.body.PatientName,
-        Age:req.body.Age,
-        patientGender: req.body.patientGender,
-        patientAddress: req.body.patientAddress,
-        patientPhone: req.body.patientPhone,
-        patientEmail: req.body.patientEmail,
-        patientVaccine: req.body.patientVaccine,
-        patientNotes: req.body.patientNotes,
-        patientDoctor: req.body.patientDoctor,
-        patientNurse: req.body.patientNurse,
-        // patientVaccine
-        // patientVaccine
-        // patientVaccine
-        // patientVaccine
-        // patientVaccine
-        // patientVaccine
+
+    let patient = req.body;
+    var sql = "INSERT INTO vaccineclinic.PatientList (PatientName, Age, PatientGender, PatientAddress, PatientPhone, PatientEmail, PatientNotes, PatientDoctor, AccountCreated) VALUES ('"+patient.PatientName+"', '"+patient.Age+"', '"+patient.PatientGender+"', '"+patient.PatientAddress+"', '"+patient.PatientPhone+"', '"+patient.PatientEmail+"', '"+patient.PatientNotes+"', '"+patient.PatientDoctor+"', NOW())";
+    pool.query(sql, (err, result) => {
+        if (err) {
+            res.status(400).json({ message : error.message});
+        }
+        else {
+            res.status(201).json(patient);
+        }
     })
-    try {
-        await newpatient.save();
-        res.status(201).json(newpatient);
-    } 
-    catch(error) {
-        res.status(400).json({ message : error.message});
-    }
 }
 
 module.exports = {getPatients, getspecPatient, createPatient};

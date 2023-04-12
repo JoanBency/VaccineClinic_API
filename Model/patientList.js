@@ -14,35 +14,31 @@ const patientListSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    patientGender: {
+    PatientGender: {
         type: String,
         required: true,
     },
-    patientAddress: {
+    PatientAddress: {
         type: String,
         required: true,
     },
-    patientPhone: {
+    PatientPhone: {
         type: String,
         required: true,
     },
-    patientEmail: {
+    PatientEmail: {
         type: String,
         required: true,
     },
-    patientVaccine: {
-        type: [mongoose.Schema.Types.ObjectId], ref: 'vaccineAdministeredList',
-        required: true,
-    },
-    patientNotes: {
+    PatientVaccine: {
         type: String,
         required: true,
     },
-    patientDoctor: {
+    PatientNotes: {
         type: String,
         required: true,
     },
-    patientNurse: {
+    PatientDoctor: {
         type: String,
         required: true,
     },

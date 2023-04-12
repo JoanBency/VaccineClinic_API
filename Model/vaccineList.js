@@ -17,7 +17,7 @@ const vaccineListSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    DosesLeft: {
+    Doses: {
         type: Number,
         required: true,
     },
