@@ -9,7 +9,7 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 
 router.get('/:id', vaccineAdministered_Act.getSpecPatientVaccines);
-// router.get('/:id', vaccineAdministered_Act.getspecVaccine);
+router.get('/listing/:id', vaccineAdministered_Act.getspecDetailsPatientVaccine);
 router.post('/', vaccineAdministered_Act.createVaccineEntry);
 // router.patch('/:id', vaccine_Act.updateVaccine);
 // router.delete('/:id', vaccine_Act.deleteVaccine);

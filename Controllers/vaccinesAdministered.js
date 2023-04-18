@@ -14,7 +14,7 @@ const pool = mysql.createPool({
  
 const getSpecPatientVaccines = async (req, res) => {
     const id = req.params.id;
-    pool.query("SELECT VAL.VaccineEntryId, VAL.AdministeredBy,  VAL.AdministeredOn, VL.VaccineName, VL.DiseaseTargeted FROM vaccineclinic.VaccineAdministeredList AS VAL , vaccineclinic.PatientList AS PL, vaccineclinic.VaccineList AS VL WHERE VAL.PatientId = PL.PatientId AND VAL.VaccineId = VL.VaccineId AND VAL.PatientId = "+id, (err, patient, fields) => {
+    pool.query("SELECT VAL.VaccineEntryId, NL.NurseName, VAL.AdministeredOn, VL.VaccineName, VL.DiseaseTargeted FROM vaccineclinic.VaccineAdministeredList AS VAL , vaccineclinic.PatientList AS PL, vaccineclinic.VaccineList AS VL, vaccineclinic.NursesList AS NL WHERE VAL.PatientId = PL.PatientId AND VAL.VaccineId = VL.VaccineId AND VAL.AdministeredById = NL.NurseId AND VAL.PatientId = "+id, (err, patient, fields) => {
         if (!err)
             res.status(200).json(patient);
         else
@@ -22,15 +22,22 @@ const getSpecPatientVaccines = async (req, res) => {
     })
 }
 
-// const getspecPatient = async (req,res) => {
-//     const id = req.params.PatientId;
-// try {
-//         const patient = await patientData.findOne({id: id});
-// res.status(200).json(stud);
-//     } catch(error) {
-//         res.status(404).json({ message: error.message});
-//     }
-// }
+const getspecDetailsPatientVaccine = async (req,res) => {
+    const id = req.params.id;
+    pool.query("SELECT VL.VaccineName, VL.DiseaseTargeted FROM vaccineclinic.VaccineAdministeredList AS VAL , vaccineclinic.PatientList AS PL, vaccineclinic.VaccineList AS VL WHERE VAL.PatientId = PL.PatientId AND VAL.VaccineId = VL.VaccineId AND VAL.PatientId= "+id, (err, vaccineEntry, fields) => {
+        if (!err)
+            res.status(200).json(vaccineEntry);
+        else
+            res.status(404).json({message: err.message});
+    })
+
+try {
+        const patient = await patientData.findOne({id: id});
+res.status(200).json(stud);
+    } catch(error) {
+        res.status(404).json({ message: error.message});
+    }
+}
 
 const createVaccineEntry =  async (req, res) => {
     console.log(req.body);
@@ -47,4 +54,4 @@ const createVaccineEntry =  async (req, res) => {
     })
 }
 
-module.exports = {getSpecPatientVaccines, createVaccineEntry};
+module.exports = {getSpecPatientVaccines, createVaccineEntry, getspecDetailsPatientVaccine};
