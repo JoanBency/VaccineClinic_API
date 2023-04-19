@@ -21,13 +21,14 @@ const getVaccines = async (req, res) => {
 }
 
 const getspecVaccine = async (req,res) => {
-    const id = req.params.VaccineId;
-try {
-        const vaccine = await vaccineData.findOne({id: id});
-res.status(200).json(stud);
-    } catch(error) {
-        res.status(404).json({ message: error.message});
-    }
+    const id = req.params.id;
+    pool.query("SELECT * FROM vaccineclinic.VaccineList WHERE VaccineId = "+id, (err, vaccine, fields) => {
+        if (!err) {
+            console.log(vaccine);
+            res.status(200).json(vaccine);}
+        else
+            res.status(404).json({message: err.message});
+        })
 }
 
 const createVaccine =  async (req, res) => {

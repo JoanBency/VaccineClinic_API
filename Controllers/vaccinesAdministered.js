@@ -14,7 +14,7 @@ const pool = mysql.createPool({
  
 const getSpecPatientVaccines = async (req, res) => {
     const id = req.params.id;
-    pool.query("SELECT VAL.VaccineEntryId, NL.NurseName, VAL.AdministeredOn, VL.VaccineName, VL.DiseaseTargeted FROM vaccineclinic.VaccineAdministeredList AS VAL , vaccineclinic.PatientList AS PL, vaccineclinic.VaccineList AS VL, vaccineclinic.NursesList AS NL WHERE VAL.PatientId = PL.PatientId AND VAL.VaccineId = VL.VaccineId AND VAL.AdministeredById = NL.NurseId AND VAL.PatientId = "+id, (err, patient, fields) => {
+    pool.query("SELECT VAL.VaccineEntryId, NL.NurseName, VAL.AdministeredOn, VL.VaccineName, VL.DiseaseTargeted, VAL.PrescriptionId FROM vaccineclinic.VaccineAdministeredList AS VAL , vaccineclinic.PatientList AS PL, vaccineclinic.VaccineList AS VL, vaccineclinic.NursesList AS NL WHERE VAL.PatientId = PL.PatientId AND VAL.VaccineId = VL.VaccineId AND VAL.AdministeredById = NL.NurseId AND VAL.PatientId = "+id, (err, patient, fields) => {
         if (!err)
             res.status(200).json(patient);
         else
@@ -39,17 +39,17 @@ res.status(200).json(stud);
     }
 }
 
+
 const createVaccineEntry =  async (req, res) => {
     console.log(req.body);
-
-    let patient = req.body;
-    var sql = "INSERT INTO vaccineclinic.PatientList (PatientName, Age, PatientGender, PatientAddress, PatientPhone, PatientEmail, PatientNotes, PatientDoctor) VALUES ('"+patient.PatientName+"', '"+patient.Age+"', '"+patient.PatientGender+"', '"+patient.PatientAddress+"', '"+patient.PatientPhone+"', '"+patient.PatientEmail+"', '"+patient.PatientNotes+"', '"+patient.PatientDoctor+"')";
+    let vaccine = req.body;
+    var sql = "INSERT INTO vaccineclinic.VaccineAdministeredList(AdministeredById, PatientId, VaccineId, PrescriptionId, AdministeredOn) VALUES ('"+vaccine.AdministeredById+"', '"+vaccine.PatientId+"', '"+vaccine.VaccineId+"', '"+vaccine.PrescriptionId+"', NOW())";
     pool.query(sql, (err, result) => {
         if (err) {
             res.status(400).json({ message : error.message});
         }
         else {
-            res.status(201).json(patient);
+            res.status(201).json(vaccine);
         }
     })
 }
